@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Marketer Life Simulator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .metric-card {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e1e1e1;
+        }
+
+        .metric-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+
+        .coffee-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #0084ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .coffee-btn:hover {
+            background-color: #0066cc;
+        }
+
+        .notifications {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .notification {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #0084ff;
+            border-radius: 4px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .burnout-alert {
+            padding: 15px;
+            background-color: #ffe5e5;
+            border-left: 4px solid #ff0000;
+            border-radius: 4px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Performance Marketer Life Simulator</h1>
+        
+        <div class="metrics">
+            <div class="metric-card">
+                <div class="metric-title">Sanity Level</div>
+                <div class="metric-value" id="sanity">100%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Coffee Count</div>
+                <div class="metric-value" id="coffee">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Client Requests</div>
+                <div class="metric-value" id="requests">0</div>
+            </div>
+        </div>
+
+        <button class="coffee-btn" onclick="drinkCoffee()">☕ Drink Coffee to Restore Sanity</button>
+        
+        <div class="notifications" id="notifications"></div>
+        
+        <div class="burnout-alert" id="burnout-alert">
+            <strong>BURNOUT ALERT! 🔥</strong>
+            <p>Time to update that LinkedIn profile... or drink more coffee! ☕</p>
+        </div>
+    </div>
+
+    <script>
+        const state = {
+            sanity: 100,
+            coffee: 0,
+            clientRequests: 0
+        };
+
+        const clientMessages = [
+            "Can we make the CTA button 0.00001px bigger?",
+            "Let's A/B test 47 versions simultaneously",
+            "Why isn't our $5 budget getting Super Bowl results?",
+            "I saw this TikTok trend from 2021...",
+            "My nephew who's 'good with computers' suggested...",
+            "Can we make it go viral? Like, today?",
+            "Let's pivot the entire strategy based on this dream I had",
+            "Why aren't we ranking #1 for 'best everything worldwide'?"
+        ];
+
+        function updateMetrics() {
+            document.getElementById('sanity').textContent = state.sanity + '%';
+            document.getElementById('coffee').textContent = state.coffee;
+            document.getElementById('requests').textContent = state.clientRequests;
+            
+            const burnoutAlert = document.getElementById('burnout-alert');
+            burnoutAlert.style.display = state.sanity === 0 ? 'block' : 'none';
+        }
+
+        function addNotification(message) {
+            const notifications = document.getElementById('notifications');
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `<strong>New Client Request!</strong><br>${message}`;
+            
+            notifications.prepend(notification);
+            
+            // Keep only last 3 notifications
+            while (notifications.children.length > 3) {
+                notifications.removeChild(notifications.lastChild);
+            }
+        }
+
+        function drinkCoffee() {
+            state.coffee++;
+            state.sanity = Math.min(100, state.sanity + 15);
+            addNotification("☕ Caffeine levels increased!");
+            updateMetrics();
+        }
+
+        // Random client requests
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                const randomMessage = clientMessages[Math.floor(Math.random() * clientMessages.length)];
+                state.clientRequests++;
+                state.sanity = Math.max(0, state.sanity - 10);
+                addNotification(randomMessage);
+                updateMetrics();
+            }
+        }, 3000);
+    </script>
+</body>
+</html>
